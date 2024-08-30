@@ -1,14 +1,14 @@
 <?php
 
-namespace App\Filament\Resources\JurusanResource\Pages;
+namespace App\Filament\Resources\AgamaResource\Pages;
 
-use App\Filament\Resources\JurusanResource;
+use App\Filament\Resources\AgamaResource;
 use Filament\Actions;
 use Filament\Resources\Pages\ListRecords;
 
-class ListJurusans extends ListRecords
+class ListAgamas extends ListRecords
 {
-    protected static string $resource = JurusanResource::class;
+    protected static string $resource = AgamaResource::class;
 
     protected function getHeaderActions(): array
     {
@@ -16,8 +16,9 @@ class ListJurusans extends ListRecords
             Actions\CreateAction::make(),
         ];
     }
+
     public function getTitle(): string
     {
-        return "Jurusan";
+        return "Agama";
     }
 }

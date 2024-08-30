@@ -17,16 +17,20 @@ class SiswaResource extends Resource
 {
     protected static ?string $model = Siswa::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
-
+    protected static ?string $navigationIcon = 'heroicon-o-user';
+    protected static ?string $navigationLabel = 'Siswa';
+    protected static ?string $navigationGroup = 'Siswa';
     public static function form(Form $form): Form
     {
         return $form
             ->schema([
-                Forms\Components\TextInput::make('nama')->label('Nama Lengkap'),
-                Forms\Components\TextInput::make('nisn'),
-                Forms\Components\TextInput::make('kelas'),
-                Forms\Components\TextArea::make('alamat'),
+                Forms\Components\TextInput::make('nama')->label('Nama Lengkap')->required(),
+                Forms\Components\TextInput::make('nisn')->required(),
+                Forms\Components\TextInput::make('kelas')->required(),
+                Forms\Components\TextArea::make('alamat')->required(),
+                Forms\Components\Select::make('agama_id')
+                ->relationship('agama', 'nama')
+                ->required(),
                 Forms\Components\Select::make('jurusan_id')
                 ->relationship('jurusan', 'nama')
                 ->required(),
@@ -37,15 +41,19 @@ class SiswaResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('nama'),
-                Tables\Columns\TextColumn::make('nisn'),
-                Tables\Columns\TextColumn::make('kelas'),
-                Tables\Columns\TextColumn::make('alamat'),
-                Tables\Columns\TextColumn::make('jurusan.nama'),
+                Tables\Columns\TextColumn::make('nama')->searchable()->sortable(),
+                Tables\Columns\TextColumn::make('nisn')->searchable()->sortable(),
+                Tables\Columns\TextColumn::make('kelas')->searchable()->sortable(),
+                Tables\Columns\TextColumn::make('alamat')->searchable()->sortable(),
+                Tables\Columns\TextColumn::make('agama.nama')->searchable()->sortable(),
+                Tables\Columns\TextColumn::make('jurusan.nama')->searchable()->sortable(),
                 ])
-                ->filters([
-                //
-            ])
+            ->filters([
+                Tables\Filters\SelectFilter::make('agama_id')
+                ->relationship('agama', 'nama'),
+                Tables\Filters\SelectFilter::make('jurusan_id')
+                ->relationship('jurusan', 'nama')
+                ])
             ->actions([
                 Tables\Actions\EditAction::make(),
             ])

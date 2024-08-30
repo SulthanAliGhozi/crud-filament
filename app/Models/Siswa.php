@@ -16,6 +16,7 @@ class Siswa extends Model
         'nisn',
         'kelas',
         'alamat',
+        'agama_id',
         'jurusan_id',
     ];
     
@@ -24,4 +25,8 @@ class Siswa extends Model
         return $this->belongsTo(Jurusan::class);
     }
 
+    public function agama(): BelongsTo
+    {
+        return $this->belongsTo(Agama::class);
+    }
 }

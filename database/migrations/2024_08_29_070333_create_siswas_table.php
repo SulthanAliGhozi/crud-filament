@@ -12,18 +12,19 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('siswas', function (Blueprint $table) {
-            $table->id();
+            $table->id();   
             $table->string('nama');
             $table->string('nisn');
             $table->string('kelas');
             $table->string('alamat');
+            $table->string('agama_id')->constrained('agamas')->cascadeOnDelete();
             $table->foreignId('jurusan_id')->constrained('jurusans')->cascadeOnDelete();
             $table->timestamps();
         });
     }
 
     /**
-     * Reverse the migrations.
+     * Reverse the migrations.s
      */
     public function down(): void
     {
