@@ -13,9 +13,13 @@ return new class extends Migration
     {
         Schema::create('gurus', function (Blueprint $table) {
             $table->id();
-            $table->string('nip');
-            $table->string('nama_guru');
-            $table->text('alamat');
+            $table->string('nip')->nullable();
+            $table->string('nama');
+            $table->date('tanggal_lahir')->nullable();
+            $table->string('agama', ['Islam', 'Kristen', 'Budha', 'Khonghucu','Katolik','Hindu'])->default('Islam');
+            $table->string('kelamin',['Laki - Laki', 'Perempuan'])->default('Laki - Laki');
+            $table->integer('kontak')->nullable();
+            $table->text('alamat')->nullable();
             $table->string('profil');
             $table->timestamps();
         });

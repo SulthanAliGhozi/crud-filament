@@ -2,16 +2,22 @@
 
 namespace App\Filament\Resources;
 
-use App\Filament\Resources\SiswaResource\Pages;
-use App\Filament\Resources\SiswaResource\RelationManagers;
-use App\Models\Siswa;
+use stdClass;
 use Filament\Forms;
-use Filament\Forms\Form;
-use Filament\Resources\Resource;
 use Filament\Tables;
+use App\Models\Siswa;
+use Filament\Forms\Form;
 use Filament\Tables\Table;
+use Filament\Resources\Resource;
+use Filament\Forms\FormsComponent;
+use Filament\Forms\Components\Card;
+use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Contracts\HasTable;
+use Filament\Tables\Columns\ImageColumn;
 use Illuminate\Database\Eloquent\Builder;
+use App\Filament\Resources\SiswaResource\Pages;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use App\Filament\Resources\SiswaResource\RelationManagers;
 
 class SiswaResource extends Resource
 {
@@ -24,16 +30,43 @@ class SiswaResource extends Resource
     {
         return $form
             ->schema([
-                Forms\Components\TextInput::make('nama')->label('Nama Lengkap')->required(),
-                Forms\Components\TextInput::make('nisn')->required(),
-                Forms\Components\TextInput::make('kelas')->required(),
-                Forms\Components\TextArea::make('alamat')->required(),
-                Forms\Components\Select::make('agama_id')
-                ->relationship('agama', 'nama')
-                ->required(),
-                Forms\Components\Select::make('jurusan_id')
-                ->relationship('jurusan', 'nama')
-                ->required(),
+                Card::make()
+                    ->schema([
+                        Forms\Components\TextInput::make('nama')->label('Nama Lengkap')->required(),
+                        Forms\Components\TextInput::make('nisn')->required(),
+                        Forms\Components\DatePicker::make('tanggal_lahir')->label('Tanggal Lahir')->required(),
+                        Forms\Components\TextInput::make('kontak')->label('No Telp')->required(),
+                        Forms\Components\Select::make('agama')
+                            ->options([
+                                'Islam' => 'Islam',
+                                'Kristen' => 'Kristen',
+                                'Katolik' => 'Katolik',
+                                'Hindu' => 'Hindu',
+                                'Buddha' => 'Buddha',
+                                'Khonghucu' => 'Khonghucu',
+                            ])
+                            ->required(),
+                        Forms\Components\Select::make('kelamin')
+                            ->options([
+                                'Laki-laki' => 'Laki-laki',
+                                'Perempuan' => 'Perempuan',
+                            ])
+                            ->required(),
+                        Forms\Components\Select::make('kelas')
+                            ->options([
+                            'X' => 'X',
+                            'XI' => 'XI',
+                            'XII' => 'XII',
+                            ])
+                            ->required(),
+                        Forms\Components\Select::make('jurusan_id')
+                            ->relationship('jurusan', 'nama')
+                            ->required(),
+                        Forms\Components\TextArea::make('alamat')->required(),
+                        Forms\Components\FileUpload::make('profil')
+                            ->directory('siswas')
+                            ->required(),
+                    ])->columns(2)
             ]);
     }
 
@@ -41,19 +74,32 @@ class SiswaResource extends Resource
     {
         return $table
             ->columns([
+                TextColumn::make('No')->state(
+                    static function (HasTable $livewire, stdClass $rowLoop): string {
+                        return (string) (
+                            $rowLoop->iteration +
+                            ($livewire->getTableRecordsPerPage() * (
+                                $livewire->getTablePage() - 1
+                            ))
+                        );
+                    }
+                ),
                 Tables\Columns\TextColumn::make('nama')->searchable()->sortable(),
                 Tables\Columns\TextColumn::make('nisn')->searchable()->sortable(),
-                Tables\Columns\TextColumn::make('kelas')->searchable()->sortable(),
+                Tables\Columns\TextColumn::make('tanggal_lahir')->searchable()->sortable(),
+                Tables\Columns\TextColumn::make('agama')->searchable()->sortable(),
+                Tables\Columns\TextColumn::make('kelamin')->searchable()->sortable(),
                 Tables\Columns\TextColumn::make('alamat')->searchable()->sortable(),
-                Tables\Columns\TextColumn::make('agama.nama')->searchable()->sortable(),
+                Tables\Columns\TextColumn::make('kontak')->searchable()->sortable(),
+                Tables\Columns\TextColumn::make('kelas')->searchable()->sortable(),
                 Tables\Columns\TextColumn::make('jurusan.nama')->searchable()->sortable(),
-                ])
+                ImageColumn::make('profil')
+                ->extraImgAttributes(['loading' => 'lazy']),
+            ])
             ->filters([
-                Tables\Filters\SelectFilter::make('agama_id')
-                ->relationship('agama', 'nama'),
                 Tables\Filters\SelectFilter::make('jurusan_id')
-                ->relationship('jurusan', 'nama')
-                ])
+                    ->relationship('jurusan', 'nama'),
+            ])
             ->actions([
                 Tables\Actions\EditAction::make(),
             ])

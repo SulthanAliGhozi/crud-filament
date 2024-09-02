@@ -15,10 +15,14 @@ return new class extends Migration
             $table->id();   
             $table->string('nama');
             $table->string('nisn');
-            $table->string('kelas');
             $table->string('alamat');
-            $table->string('agama_id')->constrained('agamas')->cascadeOnDelete();
+            $table->string('kelamin',['Laki - Laki', 'Perempuan'])->default('Laki - Laki');
+            $table->string('kelas', ['X (10)', 'XI (11)', 'XII (12)']);
+            $table->date('tanggal_lahir')->nullable();
+            $table->string('agama', ['Islam', 'Kristen', 'Budha', 'Khonghucu','Katolik','Hindu'])->default('Islam');
             $table->foreignId('jurusan_id')->constrained('jurusans')->cascadeOnDelete();
+            $table->integer('kontak')->nullable();
+            $table->string('profil')->nullable();
             $table->timestamps();
         });
     }

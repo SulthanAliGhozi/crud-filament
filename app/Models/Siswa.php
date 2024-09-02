@@ -11,22 +11,15 @@ class Siswa extends Model
     use HasFactory;
 
     
-    protected $fillable = [
-        'nama',
-        'nisn',
-        'kelas',
-        'alamat',
-        'agama_id',
-        'jurusan_id',
-    ];
+    protected $guarded = [];
     
     public function jurusan(): BelongsTo
     {
         return $this->belongsTo(Jurusan::class);
     }
 
-    public function agama(): BelongsTo
+    public function kelas(): BelongsTo
     {
-        return $this->belongsTo(Agama::class);
+        return $this->belongsTo(Kelas::class);
     }
 }

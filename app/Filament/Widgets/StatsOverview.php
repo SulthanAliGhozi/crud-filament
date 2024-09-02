@@ -24,7 +24,7 @@ class StatsOverview extends BaseWidget
             ->description('Total Jurusan Tahun Ajaran 2022')
             ->descriptionIcon('heroicon-o-academic-cap', IconPosition::Before)
             ->color('success')
-            ->Chart([0,0,0,0,20,0,3,0,1]),
+            ->Chart([0,20,0,50,0,8,0,1]),
         ];
     }
 }

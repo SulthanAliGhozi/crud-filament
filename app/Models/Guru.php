@@ -8,4 +8,10 @@ use Illuminate\Database\Eloquent\Model;
 class Guru extends Model
 {
     use HasFactory;
+    protected $guarded = [];
+
+    public function kelassiswa(){
+        return $this->hasMany(HomeRoom::class, 'guru_id', 'id');
+    }
+
 }
