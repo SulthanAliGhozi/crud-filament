@@ -23,6 +23,7 @@ return new class extends Migration
             $table->foreignId('jurusan_id')->constrained('jurusans')->cascadeOnDelete();
             $table->integer('kontak')->nullable();
             $table->string('profil')->nullable();
+            $table->string('status' , ['accept' , 'off' , 'move' , 'grade'])->nullable();
             $table->timestamps();
         });
     }

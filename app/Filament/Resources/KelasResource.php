@@ -23,6 +23,16 @@ class KelasResource extends Resource
     protected static ?string $navigationLabel = 'Kelas',
     $navigationGroup = 'Guru';
 
+    public static function shouldRegisterNavigation(): bool
+    {
+        if(auth()->user()->can('kelas'))
+        return true;
+        else
+        return false;
+    }
+
+
+
     public static function form(Form $form): Form
     {
         return $form
@@ -42,6 +52,7 @@ class KelasResource extends Resource
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),
+                Tables\Actions\DeleteAction::make(),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([

@@ -24,7 +24,7 @@ class GuruResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
     protected static ?string $navigationLabel = 'Guru';
-    protected static ?string $navigationGroup= 'Guru';
+    protected static ?string $navigationGroup = 'Guru';
 
 
     public static function form(Form $form): Form
@@ -32,26 +32,27 @@ class GuruResource extends Resource
         return $form
             ->schema([
                 Forms\Components\TextInput::make('nip')
+                    ->numeric()
                     ->required(),
                 Forms\Components\TextInput::make('nama')
                     ->required(),
                 Forms\Components\DatePicker::make('tanggal_lahir')->label('Tanggal Lahir')->required(),
                 Forms\Components\Select::make('agama')
-                            ->options([
-                                'Islam' => 'Islam',
-                                'Kristen' => 'Kristen',
-                                'Katolik' => 'Katolik',
-                                'Hindu' => 'Hindu',
-                                'Buddha' => 'Buddha',
-                                'Khonghucu' => 'Khonghucu',
-                            ])
-                            ->required(),
-                            Forms\Components\Select::make('kelamin')
-                            ->options([
-                                'Laki-laki' => 'Laki-laki',
-                                'Perempuan' => 'Perempuan',
-                            ])
-                            ->required(),
+                    ->options([
+                        'Islam' => 'Islam',
+                        'Kristen' => 'Kristen',
+                        'Katolik' => 'Katolik',
+                        'Hindu' => 'Hindu',
+                        'Buddha' => 'Buddha',
+                        'Khonghucu' => 'Khonghucu',
+                    ])
+                    ->required(),
+                Forms\Components\Select::make('kelamin')
+                    ->options([
+                        'Laki-laki' => 'Laki-laki',
+                        'Perempuan' => 'Perempuan',
+                    ])
+                    ->required(),
                 Forms\Components\TextInput::make('kontak')->label('No Telp')->required(),
                 Forms\Components\Textarea::make('alamat')->required(),
                 Forms\Components\FileUpload::make('profil')
@@ -75,6 +76,7 @@ class GuruResource extends Resource
                     }
                 ),
                 Tables\Columns\TextColumn::make('nip')
+                ->copyable()
                     ->searchable(),
                 Tables\Columns\TextColumn::make('nama')
                     ->searchable(),
@@ -82,10 +84,10 @@ class GuruResource extends Resource
                     ->searchable(),
                 Tables\Columns\TextColumn::make('kelamin')
                     ->searchable(),
-                    Tables\Columns\TextColumn::make('kontak')
+                Tables\Columns\TextColumn::make('kontak')
                     ->searchable()
                     ->sortable(),
-                    Tables\Columns\TextColumn::make('alamat')
+                Tables\Columns\TextColumn::make('alamat')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('tanggal_lahir')->searchable()->sortable(),
                 ImageColumn::make('profil')
@@ -96,6 +98,7 @@ class GuruResource extends Resource
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),
+                Tables\Actions\DeleteAction::make(),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
